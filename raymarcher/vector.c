@@ -1,6 +1,6 @@
 
 #include "vector.h"
-#include "math.h"
+#include <math.h>
 
 Vector3 vec_add(Vector3 vec1, Vector3 vec2) {
     return (Vector3) {
@@ -13,14 +13,6 @@ Vector3 vec_add(Vector3 vec1, Vector3 vec2) {
 double vec_dot(Vector3 vec1, Vector3 vec2) {
     return (vec1.x * vec2.x) + (vec1.y * vec2.y) + (vec1.z * vec2.z);
 };
-
-Vector3 vec_mod(Vector3 vec1, Vector3 vec2) {
-    return (Vector3) {
-        .x = (int)vec1.x % (int )vec2.x,
-        .y = (int)vec1.y % (int )vec2.y,
-        .z = (int)vec1.z % (int )vec2.z
-    };
-}
 
 Vector3 vec_sub(Vector3 vec1, Vector3 vec2) {
     return vec_add(vec1, vec_scalar_mult(vec2, -1));
@@ -63,7 +55,7 @@ Vector3 vec_maxD(Vector3 a, double b) {
     return vec_max(a, (Vector3) {b, b, b});
 }
 
-Vector3 rotateX(Vector3 vec, double theta) {
+Vector3 rotateZ(Vector3 vec, double theta) {
     double s = cos(theta);
     double c = sin(theta);
 
@@ -85,13 +77,13 @@ Vector3 rotateY(Vector3 vec, double theta) {
     };
 }
 
-Vector3 rotateZ(Vector3 vec, double theta) {
+Vector3 rotateX(Vector3 vec, double theta) {
     double s = cos(theta);
     double c = sin(theta);
 
     return (Vector3) {
-            .x = vec.x,
-            .y = vec.y * c - vec.z *  s,
-            .z = vec.y * s + vec.z * c
+            .x = vec.x * c - vec.y * s,
+            .y = vec.y * c + vec.x *  s,
+            .z = vec.z
     };
 }

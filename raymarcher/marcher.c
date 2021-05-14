@@ -1,19 +1,18 @@
 #include "marcher.h"
-#include "sdfs.h"
-#include <stdio.h>
+#include <math.h>
 
-#define MAX(x, y) ((x) > (y) ? (x) : (y))
-#define MIN(x, y) ((x) > (y) ? (y) : (x))
-#define MIN_DIST 0.0001
-#define MAX_DIST 50
-#define MAX_STEPS 500
+#define MIN_DIST 0.001
+#define MAX_DIST 20
+#define MAX_STEPS 256
+#define SHADOW 0.9
 
+//https://www.iquilezles.org/www/articles/normalsSDF/normalsSDF.htm
 Vector3 surface_normal(Vector3 pos, DE f) {
     const double eps = 0.001;
 
-    Vector3 xyy = {.x = eps};
-    Vector3 yxy = {.y = eps};
-    Vector3 yyx = {.z = eps};
+    const Vector3 xyy = {.x = eps};
+    const Vector3 yxy = {.y = eps};
+    const Vector3 yyx = {.z = eps};
 
     Vector3 normal = {
             .x = f(vec_add(pos, xyy)).distance - f(vec_sub(pos, xyy)).distance,
@@ -64,13 +63,13 @@ double soft_shadow(Vector3 origin, Vector3 lightDir, DE f, double k) {
         double d = f(vec_add(origin, vec_scalar_mult(lightDir, totalDist))).distance;
 
         if (d < MIN_DIST) {
-            return 0.0;
+            return (1.0 - SHADOW);
         }
 
         if (d > MAX_DIST) {
             break;
         }
-        res = MIN(res, k * d / totalDist);
+        res = fmin(res, k * d / totalDist);
         totalDist += d;
     }
 
@@ -94,10 +93,9 @@ Vector3 get_color(Vector3 origin, Vector3 dir, DE f) {
         double k = soft_shadow(origin, lightDir, f, 5);
 
         //diffuse lighting
-        k *= MAX(0.0, vec_dot(lightDir, normal));
+        k *= fmax(0.0, vec_dot(lightDir, normal));
 
         col = vec_scalar_mult(col, k);
-
 
         return col;
     }

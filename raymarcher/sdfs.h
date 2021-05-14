@@ -8,4 +8,4 @@ typedef struct {
 
 typedef SDFResult (*DE)(Vector3);
 
-SDFResult among_gus(Vector3 pos);
+SDFResult scene(Vector3 pos);
