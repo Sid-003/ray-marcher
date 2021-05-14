@@ -16,7 +16,7 @@ Vector3 repeat_xz(Vector3 pos, double fx, double fz) {
     return pos;
 }
 
-//stolen from: //stolen from: http://blog.hvidtfeldts.net/index.php/2011/09/distance-estimated-3d-fractals-v-the-mandelbulb-different-de-approximations/
+//stolen from: http://blog.hvidtfeldts.net/index.php/2011/09/distance-estimated-3d-fractals-v-the-mandelbulb-different-de-approximations/
 SDFResult mandelbulb(Vector3 pos) {
     double power = 8.0;
 
