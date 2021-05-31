@@ -5,10 +5,15 @@
 #define WIDTH 1000
 #define HEIGHT 1000
 
-int main() {
-    FILE* fp = fopen("marched.ppm", "w");
+struct Color {
+    char r, g, b;
+};
 
-    fprintf(fp, "P3\n%d %d\n255\n", (int) WIDTH, (int ) HEIGHT);
+
+int main() {
+    FILE* fp = fopen("marched.ppm", "wb");
+
+    fprintf(fp, "P6\n%d %d\n255\n", (int) WIDTH, (int ) HEIGHT);
 
     double ar = WIDTH * 1.0 / HEIGHT;
     for (int y = 0; y < HEIGHT; y++) {
@@ -25,10 +30,16 @@ int main() {
             Vector3 color = get_color(camera, rayDir, scene);
 
             color.x = pow(color.x, 0.4545);
-            color.y = pow(color.z, 0.4545);
+            color.y = pow(color.y, 0.4545);
             color.z = pow(color.z, 0.4545);
 
-            fprintf(fp, "%d %d %d\n", (int) (color.x * 255), (int) (color.y * 255), (int) (color.z * 255));
+            struct Color c = {
+                    .r = (char) (255 * color.x),
+                    .g = (char) (255 * color.y),
+                    .b = (char) (255 * color.z)
+            };
+
+            fwrite(&c, sizeof(struct Color), 1, fp);
         }
     }
     printf("done");
